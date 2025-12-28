@@ -1,0 +1,25 @@
+# Banking Data Platform
+
+Event-driven banking data processing platform built with:
+
+- Java 21
+- Spring Boot 3
+- Apache Kafka
+- Spring Batch
+- Elasticsearch
+- Redis
+- Micrometer
+- Docker
+
+## Architecture
+Clean Architecture with clear separation between:
+- Domain
+- Application
+- Infrastructure
+- API
+
+## Use Cases
+- Real-time transaction processing
+- Daily batch aggregation
+- Search and reporting
+- Cache-optimized queries

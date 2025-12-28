@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.yourname.banking</groupId>
+    <groupId>com.sadeghian.banking</groupId>
     <artifactId>banking-data-platform</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -15,12 +15,12 @@
 
     <!-- 🔹 Modules -->
     <modules>
-        <module>banking-bootstrap</module>
-        <module>banking-api</module>
-        <module>banking-application</module>
+<!--        <module>banking-bootstrap</module>-->
+<!--        <module>banking-api</module>-->
+<!--        <module>banking-application</module>-->
         <module>banking-domain</module>
-        <module>banking-infrastructure</module>
-        <module>banking-common</module>
+<!--        <module>banking-infrastructure</module>-->
+<!--        <module>banking-common</module>-->
     </modules>
 
     <!-- 🔹 Properties -->
@@ -43,19 +43,22 @@
         </dependencies>
     </dependencyManagement>
 
-    <!-- 🔹 Build -->
     <build>
         <pluginManagement>
             <plugins>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.11.0</version>
                     <configuration>
                         <release>21</release>
                     </configuration>
                 </plugin>
+
             </plugins>
         </pluginManagement>
     </build>
+
 
 </project>
