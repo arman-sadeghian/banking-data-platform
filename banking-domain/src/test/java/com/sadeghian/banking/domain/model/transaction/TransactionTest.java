@@ -35,7 +35,7 @@ class TransactionTest {
         assertThat(tx.status()).isEqualTo(TransactionStatus.INDEXED);
     }
 
-    
+
     @Test
     void should_create_transaction_when_time_is_valid() {
         Transaction tx = new Transaction(

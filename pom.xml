@@ -19,7 +19,8 @@
 <!--        <module>banking-api</module>-->
 <!--        <module>banking-application</module>-->
         <module>banking-domain</module>
-<!--        <module>banking-infrastructure</module>-->
+        <module>banking-application</module>
+        <!--        <module>banking-infrastructure</module>-->
 <!--        <module>banking-common</module>-->
     </modules>
 
