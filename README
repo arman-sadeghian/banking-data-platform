@@ -1,25 +1,35 @@
 # Banking Data Platform
 
-Event-driven banking data processing platform built with:
+An enterprise-grade, event-driven banking data processing platform built with modern Java and clean architecture principles.
 
+## Tech Stack
 - Java 21
 - Spring Boot 3
-- Apache Kafka
-- Spring Batch
-- Elasticsearch
-- Redis
-- Micrometer
+- Apache Kafka (Streaming)
+- Spring Batch (Batch Processing)
+- Elasticsearch (Search & Analytics)
+- Redis (Caching)
+- Micrometer (Observability)
 - Docker
 
 ## Architecture
-Clean Architecture with clear separation between:
-- Domain
-- Application
-- Infrastructure
-- API
+This project follows **Clean Architecture** principles:
+- Domain is framework-agnostic
+- Application layer contains pure use cases
+- Infrastructure handles Kafka, persistence, search, cache
+- Spring is used only for wiring and adapters
 
-## Use Cases
-- Real-time transaction processing
-- Daily batch aggregation
-- Search and reporting
-- Cache-optimized queries
+## Current Features
+- Core banking domain model with validations
+- Transaction processing use case
+- Fully unit-tested domain and application layers
+- Multi-module Maven structure
+
+## Planned Features
+- Kafka consumer with retry & DLQ
+- Batch aggregation jobs
+- REST API for search and reports
+- Docker Compose setup
+
+## Status
+🚧 In active development
