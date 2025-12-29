@@ -32,13 +32,22 @@ public class TransactionEventKafkaConsumer {
             topics = "banking.transaction.events",
             groupId = "banking-transaction-processor"
     )
-    public void consume(ConsumerRecord<String, String> record) throws Exception {
+    public void consume(ConsumerRecord<String, String> record) {
 
-        TransactionEventMessage message =
-                objectMapper.readValue(record.value(), TransactionEventMessage.class);
+        try {
+            TransactionEventMessage message =
+                    objectMapper.readValue(
+                            record.value(),
+                            TransactionEventMessage.class
+                    );
 
-        var domainEvent = TransactionEventMapper.toDomain(message, clock);
+            var domainEvent =
+                    TransactionEventMapper.toDomain(message, clock);
 
-        useCase.process(domainEvent);
+            useCase.process(domainEvent);
+
+        } catch (Exception ex) {
+            throw new RuntimeException("Kafka processing failed", ex);
+        }
     }
 }
