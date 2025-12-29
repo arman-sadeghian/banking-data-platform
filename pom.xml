@@ -13,25 +13,21 @@
     <name>Banking Data Platform</name>
     <description>Event-driven banking data processing platform</description>
 
-    <!-- 🔹 Modules -->
     <modules>
-<!--        <module>banking-bootstrap</module>-->
-<!--        <module>banking-api</module>-->
-<!--        <module>banking-application</module>-->
         <module>banking-domain</module>
         <module>banking-application</module>
-        <!--        <module>banking-infrastructure</module>-->
+        <module>banking-infrastructure</module>
+        <module>banking-bootstrap</module>
 <!--        <module>banking-common</module>-->
     </modules>
 
-    <!-- 🔹 Properties -->
+
     <properties>
         <java.version>21</java.version>
         <spring.boot.version>3.4.0</spring.boot.version>
         <maven.compiler.release>21</maven.compiler.release>
     </properties>
 
-    <!-- 🔹 Dependency Management -->
     <dependencyManagement>
         <dependencies>
             <dependency>
