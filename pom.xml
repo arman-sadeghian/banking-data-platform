@@ -17,9 +17,11 @@
         <module>banking-domain</module>
         <module>banking-application</module>
         <module>banking-infrastructure</module>
+        <module>banking-api</module>
         <module>banking-bootstrap</module>
 <!--        <module>banking-common</module>-->
     </modules>
+
 
 
     <properties>
