@@ -1,11 +1,13 @@
 package com.sadeghian.banking.bootstrap.config;
 
 import com.sadeghian.banking.application.port.in.ProcessTransactionEventUseCase;
+import com.sadeghian.banking.application.port.in.SearchTransactionsUseCase;
 import com.sadeghian.banking.application.port.out.CustomerLookupPort;
 import com.sadeghian.banking.application.port.out.TransactionRepository;
 import com.sadeghian.banking.application.port.out.TransactionSearchRepository;
 import com.sadeghian.banking.application.usecase.ProcessTransactionEventService;
 
+import com.sadeghian.banking.application.usecase.SearchTransactionsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -31,4 +33,12 @@ public class UseCaseConfiguration {
     public Clock systemClock() {
         return Clock.systemUTC();
     }
+
+    @Bean
+    public SearchTransactionsUseCase searchTransactionsUseCase(
+            TransactionSearchRepository repository
+    ) {
+        return new SearchTransactionsService(repository);
+    }
+
 }
