@@ -1,35 +1,145 @@
-# Banking Data Platform
+Banking Data Platform
 
-An enterprise-grade, event-driven banking data processing platform built with modern Java and clean architecture principles.
+An event-driven banking data processing platform built with Java 21, Spring Boot, and Clean Architecture principles.
+This project demonstrates a production-oriented backend design using streaming, search, and containerization.
 
-## Tech Stack
-- Java 21
-- Spring Boot 3
-- Apache Kafka (Streaming)
-- Spring Batch (Batch Processing)
-- Elasticsearch (Search & Analytics)
-- Redis (Caching)
-- Micrometer (Observability)
-- Docker
+🚀 Features
 
-## Architecture
-This project follows **Clean Architecture** principles:
-- Domain is framework-agnostic
-- Application layer contains pure use cases
-- Infrastructure handles Kafka, persistence, search, cache
-- Spring is used only for wiring and adapters
+Event-driven architecture with Apache Kafka
 
-## Current Features
-- Core banking domain model with validations
-- Transaction processing use case
-- Fully unit-tested domain and application layers
-- Multi-module Maven structure
+Clean Architecture (Domain / Application / Infrastructure / API / Bootstrap)
 
-## Planned Features
-- Kafka consumer with retry & DLQ
-- Batch aggregation jobs
-- REST API for search and reports
-- Docker Compose setup
+Transaction processing pipeline
 
-## Status
+Elasticsearch indexing and search
+
+REST API for querying transactions
+
+Retry & Dead Letter Queue (DLQ) for Kafka consumers
+
+Docker & Docker Compose for one-command local setup
+
+🧱 Architecture Overview
+Client
+  ↓
+REST API (banking-api)
+  ↓
+Application Use Cases (banking-application)
+  ↓
+Ports (Interfaces)
+  ↓
+Infrastructure Adapters
+    - Kafka Consumer
+    - Elasticsearch Adapter
+  ↓
+Domain Model (banking-domain)
+
+Key Principles
+
+Business logic is framework-agnostic
+
+Spring is used only for wiring and adapters
+
+Dependencies always point inward
+
+🛠️ Tech Stack
+
+Java 21
+
+Spring Boot 3
+
+Apache Kafka
+
+Elasticsearch
+
+Spring Data Elasticsearch
+
+Docker & Docker Compose
+
+Maven (Multi-module)
+
+📦 Modules
+Module	Description
+banking-domain	Core domain model and business rules
+banking-application	Use cases and ports (application logic)
+banking-infrastructure	Kafka & Elasticsearch adapters
+banking-api	REST API (Inbound adapter)
+banking-bootstrap	Spring Boot entry point & wiring
+🐳 Running the Project (Docker)
+1️⃣ Build the application image
+docker build -t banking-data-platform .
+
+2️⃣ Start all services
+docker compose up
+
+
+This will start:
+
+Kafka
+
+Zookeeper
+
+Elasticsearch
+
+Banking Application
+
+🔍 API Usage
+Search Transactions by Customer ID
+GET http://localhost:8080/api/transactions?customerId=123
+
+
+Response Example
+
+[
+  {
+    "transactionId": "tx-1",
+    "customerId": "123",
+    "accountId": "acc-99",
+    "amount": 1500,
+    "currency": "USD",
+    "transactionType": "DEPOSIT",
+    "channel": "MOBILE",
+    "transactionTime": "2025-01-01T10:15:30Z",
+    "status": "COMPLETED"
+  }
+]
+
+📡 Kafka Topics
+Topic	Purpose
+banking.transaction.events	Main transaction events
+banking.transaction.retry	Retry topic
+banking.transaction.dlq	Dead Letter Queue
+🧪 Testing Strategy
+
+Domain and application layers are unit-tested
+
+Use cases are tested without Spring context
+
+Infrastructure concerns are isolated
+
+🧠 Design Highlights
+
+No Spring annotations in Domain or Application layers
+
+Use cases wired in a dedicated bootstrap (composition root)
+
+Retry & DLQ handled centrally via Spring Kafka error handling
+
+Docker builds optimized using multi-stage builds
+
+📌 Status
+
 🚧 In active development
+
+Planned next steps:
+
+Swagger / OpenAPI documentation
+
+Micrometer & metrics
+
+Spring Batch jobs for aggregation
+
+👤 Author
+
+Arman Sadeghian
+Backend Engineer | Java | Event-Driven Systems
