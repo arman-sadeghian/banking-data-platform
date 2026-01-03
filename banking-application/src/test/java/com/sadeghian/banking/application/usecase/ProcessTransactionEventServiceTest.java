@@ -20,8 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProcessTransactionEventServiceTest {
 
-    private final TransactionRepository repository = tx -> {};
-    private final TransactionSearchRepository searchRepository = tx -> {};
+    private final TransactionRepository repository = tx -> {
+    };
+    private final TransactionSearchRepository searchRepository = new FakeTransactionSearchRepository();
     private final CustomerLookupPort customerLookup =
             id -> new Customer(id, CustomerType.INDIVIDUAL, RiskLevel.LOW);
 
