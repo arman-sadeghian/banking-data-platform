@@ -1,0 +1,17 @@
+spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: false
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    path: /swagger

@@ -7,11 +7,14 @@ import com.sadeghian.banking.infrastructure.elasticsearch.mapper.TransactionDocu
 import com.sadeghian.banking.infrastructure.elasticsearch.mapper.TransactionSearchResultMapper;
 import com.sadeghian.banking.infrastructure.elasticsearch.repository.TransactionElasticsearchRepository;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Component
+@Repository
+@Profile("!local")
 public class ElasticsearchTransactionSearchAdapter
         implements TransactionSearchRepository {
 
