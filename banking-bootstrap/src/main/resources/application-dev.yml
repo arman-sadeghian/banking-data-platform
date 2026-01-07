@@ -1,0 +1,13 @@
+server:
+  port: 9090
+
+spring:
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+
+management:
+  health:
+    elasticsearch:
+      enabled: true
