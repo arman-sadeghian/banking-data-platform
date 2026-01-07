@@ -4,6 +4,9 @@ spring:
       repositories:
         enabled: false
 
+server:
+  port: 12370
+
 management:
   health:
     elasticsearch:
@@ -14,4 +17,5 @@ springdoc:
     enabled: true
   swagger-ui:
     enabled: true
-    path: /swagger
+
+

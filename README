@@ -85,7 +85,7 @@ Banking Application
 
 🔍 API Usage
 Search Transactions by Customer ID
-GET http://localhost:8080/api/transactions?customerId=123
+GET http://localhost:8081/api/transactions?customerId=123
 
 
 Response Example

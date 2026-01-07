@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.sadeghian.banking")
 public class BankingDataPlatformApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(BankingDataPlatformApplication.class, args);
     }
 }
+
