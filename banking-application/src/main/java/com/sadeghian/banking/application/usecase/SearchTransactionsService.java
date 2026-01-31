@@ -3,6 +3,7 @@ package com.sadeghian.banking.application.usecase;
 import com.sadeghian.banking.application.dto.TransactionSearchResult;
 import com.sadeghian.banking.application.port.in.SearchTransactionsUseCase;
 import com.sadeghian.banking.application.port.out.TransactionSearchRepository;
+import com.sadeghian.banking.domain.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +18,14 @@ public class SearchTransactionsService implements SearchTransactionsUseCase {
 
     @Override
     public List<TransactionSearchResult> searchByCustomerId(String customerId) {
-        return repository.findByCustomerId(customerId);
+        List<TransactionSearchResult> results = repository.findByCustomerId(customerId);
+
+        if (results.isEmpty()) {
+            throw new ResourceNotFoundException(
+                    "No transactions found for customer: " + customerId
+            );
+        }
+
+        return results;
     }
 }
