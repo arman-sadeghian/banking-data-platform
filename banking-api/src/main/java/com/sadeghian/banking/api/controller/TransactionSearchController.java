@@ -8,10 +8,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Validated
 @RestController
 @RequestMapping("/api/transactions")
 @Tag(name = "Transactions", description = "Customer transaction operations")
@@ -35,10 +38,8 @@ public class TransactionSearchController {
     })
     public List<TransactionSearchResult> searchByCustomer(
             @RequestParam(name = "customerId")
-            @Parameter(
-                    description = "Customer identifier",
-                    example = "123"
-            )
+            @Parameter(description = "Customer identifier", example = "123")
+            @NotBlank(message = "customerId must not be blank")
             String customerId
     ) {
         return useCase.searchByCustomerId(customerId);
