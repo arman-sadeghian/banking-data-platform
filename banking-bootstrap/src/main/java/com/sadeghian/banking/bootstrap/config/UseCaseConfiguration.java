@@ -6,7 +6,6 @@ import com.sadeghian.banking.application.port.out.CustomerLookupPort;
 import com.sadeghian.banking.application.port.out.TransactionRepository;
 import com.sadeghian.banking.application.port.out.TransactionSearchRepository;
 import com.sadeghian.banking.application.usecase.ProcessTransactionEventService;
-
 import com.sadeghian.banking.application.usecase.SearchTransactionsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,5 +39,4 @@ public class UseCaseConfiguration {
     ) {
         return new SearchTransactionsService(repository);
     }
-
 }

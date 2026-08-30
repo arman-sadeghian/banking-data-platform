@@ -1,5 +1,6 @@
 package com.sadeghian.banking.api.controller;
 
+import com.sadeghian.banking.api.dto.CreateTransactionRequest;
 import com.sadeghian.banking.application.dto.TransactionSearchResult;
 import com.sadeghian.banking.application.port.in.SearchTransactionsUseCase;
 
@@ -8,7 +9,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,18 @@ public class TransactionSearchController {
 
     public TransactionSearchController(SearchTransactionsUseCase useCase) {
         this.useCase = useCase;
+    }
+
+
+    @PostMapping
+    @Operation(
+            summary = "Create transaction",
+            description = "Accepts a new banking transaction"
+    )
+    public ResponseEntity<CreateTransactionRequest> createTransaction(
+            @Valid @RequestBody CreateTransactionRequest request
+    ) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(request);
     }
 
     @GetMapping
