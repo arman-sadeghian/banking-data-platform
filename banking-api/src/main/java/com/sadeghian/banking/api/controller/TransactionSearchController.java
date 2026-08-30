@@ -1,6 +1,7 @@
 package com.sadeghian.banking.api.controller;
 
 import com.sadeghian.banking.api.dto.CreateTransactionRequest;
+import com.sadeghian.banking.application.dto.CreateTransactionCommand;
 import com.sadeghian.banking.application.dto.TransactionSearchResult;
 import com.sadeghian.banking.application.port.in.SearchTransactionsUseCase;
 
@@ -15,7 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
+import com.sadeghian.banking.application.port.in.CreateTransactionUseCase;
 import java.util.List;
 
 @Validated
@@ -25,9 +26,14 @@ import java.util.List;
 public class TransactionSearchController {
 
     private final SearchTransactionsUseCase useCase;
+    private final CreateTransactionUseCase createTransactionUseCase;
 
-    public TransactionSearchController(SearchTransactionsUseCase useCase) {
+    public TransactionSearchController(
+            SearchTransactionsUseCase useCase,
+            CreateTransactionUseCase createTransactionUseCase
+    ) {
         this.useCase = useCase;
+        this.createTransactionUseCase = createTransactionUseCase;
     }
 
 
@@ -36,10 +42,25 @@ public class TransactionSearchController {
             summary = "Create transaction",
             description = "Accepts a new banking transaction"
     )
-    public ResponseEntity<CreateTransactionRequest> createTransaction(
+    public ResponseEntity<Void> createTransaction(
             @Valid @RequestBody CreateTransactionRequest request
     ) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(request);
+
+        CreateTransactionCommand command =
+                new CreateTransactionCommand(
+                        request.getTransactionId(),
+                        request.getCustomerId(),
+                        request.getAccountId(),
+                        request.getAmount(),
+                        request.getCurrency(),
+                        request.getType(),
+                        request.getChannel(),
+                        request.getTransactionTime()
+                );
+
+        createTransactionUseCase.create(command);
+
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping

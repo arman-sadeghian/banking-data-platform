@@ -14,5 +14,7 @@ public record TransactionEventMessage(
         String transactionType,
         String channel,
         Instant transactionTime,
+        Instant eventTime,
         String sourceSystem
-) {}
+) {
+}
