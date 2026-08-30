@@ -1,6 +1,5 @@
 package com.sadeghian.banking.bootstrap.error;
 
-
 import com.sadeghian.banking.domain.exception.BusinessException;
 import com.sadeghian.banking.domain.exception.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-//@RestControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
@@ -57,5 +56,3 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }
-
-

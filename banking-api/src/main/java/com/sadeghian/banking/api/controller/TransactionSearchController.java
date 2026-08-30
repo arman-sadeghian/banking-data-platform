@@ -31,11 +31,14 @@ public class TransactionSearchController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "404", description = "Customer not found"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "500", description = "Internal error")
+            @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     public List<TransactionSearchResult> searchByCustomer(
-            @RequestParam @Parameter(description = "Customer identifier", example = "123")
+            @RequestParam(name = "customerId")
+            @Parameter(
+                    description = "Customer identifier",
+                    example = "123"
+            )
             String customerId
     ) {
         return useCase.searchByCustomerId(customerId);
