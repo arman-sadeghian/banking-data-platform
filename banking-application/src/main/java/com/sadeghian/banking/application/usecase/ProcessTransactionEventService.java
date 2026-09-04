@@ -33,17 +33,16 @@ public class ProcessTransactionEventService
 
         transaction.markValidated();
 
-        var customer =
-                customerLookupPort.findByCustomerId(
-                        transaction.customerId()
-                );
+        var customer = customerLookupPort.findByCustomerId(
+                transaction.customerId()
+        );
 
         transaction.enrich(customer);
 
         transactionRepository.save(transaction);
 
-        searchRepository.index(transaction);
-
         transaction.markIndexed();
+
+        searchRepository.index(transaction);
     }
 }

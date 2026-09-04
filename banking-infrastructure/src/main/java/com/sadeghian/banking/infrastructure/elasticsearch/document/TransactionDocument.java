@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 
 @Getter
 @Setter
@@ -15,13 +14,15 @@ public class TransactionDocument {
 
     @Id
     private String transactionId;
+
     private String customerId;
     private String accountId;
     private BigDecimal amount;
     private String currency;
     private String transactionType;
     private String channel;
-    private Instant transactionTime;
-    private String status;
 
+    private Long transactionTime;
+
+    private String status;
 }

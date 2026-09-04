@@ -15,7 +15,7 @@ public class TransactionDocumentMapper {
         doc.setCurrency(tx.money().currency().getCurrencyCode());
         doc.setTransactionType(tx.type().name());
         doc.setChannel(tx.channel().name());
-        doc.setTransactionTime(tx.transactionTime());
+        doc.setTransactionTime(tx.transactionTime().toEpochMilli());
         doc.setStatus(tx.status().name());
 
         return doc;

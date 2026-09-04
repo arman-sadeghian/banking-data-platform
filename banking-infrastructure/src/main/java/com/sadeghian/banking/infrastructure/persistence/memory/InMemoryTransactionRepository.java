@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-@Profile("local")
+@Profile({"local", "dev"})
 public class InMemoryTransactionRepository implements TransactionRepository {
 
     private final List<Transaction> store = new ArrayList<>();

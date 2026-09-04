@@ -1,13 +1,15 @@
-server:
-  port: 9090
-
 spring:
-  data:
-    elasticsearch:
-      repositories:
-        enabled: true
+  elasticsearch:
+    uris: http://localhost:9200
 
-management:
-  health:
-    elasticsearch:
-      enabled: true
+  kafka:
+    bootstrap-servers: localhost:9092
+
+server:
+  port: 18080
+
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
