@@ -5,7 +5,7 @@ spring:
         enabled: false
 
 server:
-  port: 12370
+  port: 18080
 
 management:
   health:
