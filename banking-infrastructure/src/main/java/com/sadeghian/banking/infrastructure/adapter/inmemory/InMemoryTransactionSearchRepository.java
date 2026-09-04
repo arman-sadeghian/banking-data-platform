@@ -17,62 +17,18 @@ public class InMemoryTransactionSearchRepository
     private final List<Transaction> transactions =
             new CopyOnWriteArrayList<>();
 
-    public InMemoryTransactionSearchRepository() {
-        System.out.println(
-                ">>> SEARCH REPOSITORY CREATED: "
-                        + System.identityHashCode(this)
-        );
-    }
-
     @Override
     public void index(Transaction transaction) {
-
-        System.out.println(
-                ">>> INDEX repository="
-                        + System.identityHashCode(this)
-                        + " transaction="
-                        + transaction.transactionId()
-        );
-
         transactions.add(transaction);
-
-        System.out.println(
-                ">>> INDEX SIZE = " + transactions.size()
-        );
     }
 
     @Override
     public List<TransactionSearchResult> findByCustomerId(
             String customerId
     ) {
-
-        System.out.println(
-                ">>> SEARCH repository="
-                        + System.identityHashCode(this)
-                        + " customer="
-                        + customerId
-        );
-
-        System.out.println(
-                ">>> SEARCH SIZE BEFORE FILTER = "
-                        + transactions.size()
-        );
-
-        transactions.forEach(transaction ->
-                System.out.println(
-                        ">>> STORED: "
-                                + transaction.transactionId()
-                                + " customer="
-                                + transaction.customerId()
-                                + " status="
-                                + transaction.status()
-                )
-        );
-
         return transactions.stream()
                 .filter(transaction ->
-                        transaction.customerId()
-                                .equals(customerId)
+                        transaction.customerId().equals(customerId)
                 )
                 .map(this::toSearchResult)
                 .toList();

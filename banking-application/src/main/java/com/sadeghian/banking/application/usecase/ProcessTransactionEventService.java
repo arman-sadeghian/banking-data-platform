@@ -28,19 +28,20 @@ public class ProcessTransactionEventService
 
     @Override
     public void process(TransactionEvent event) {
+
         Transaction transaction = event.transaction();
 
-        // 1️⃣ validate
         transaction.markValidated();
 
-        // 2️⃣ enrich
-        var customer = customerLookupPort.findByCustomerId(transaction.customerId());
+        var customer =
+                customerLookupPort.findByCustomerId(
+                        transaction.customerId()
+                );
+
         transaction.enrich(customer);
 
-        // 3️⃣ persist
         transactionRepository.save(transaction);
 
-        // 4️⃣ index for search
         searchRepository.index(transaction);
 
         transaction.markIndexed();

@@ -81,11 +81,8 @@ public class TransactionEventConsumer {
             processTransactionEventUseCase.process(event);
 
         } catch (Exception e) {
-            //TODO: remove it
-            e.printStackTrace();
-
             throw new RuntimeException(
-                    "Failed to process transaction event: " + e.getMessage(),
+                    "Failed to process transaction event",
                     e
             );
         }
