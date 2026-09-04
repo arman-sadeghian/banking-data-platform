@@ -1,145 +1,488 @@
-Banking Data Platform
+# Banking Data Platform
 
-An event-driven banking data processing platform built with Java 21, Spring Boot, and Clean Architecture principles.
-This project demonstrates a production-oriented backend design using streaming, search, and containerization.
+An event-driven banking transaction processing platform built with **Java 21**, **Spring Boot**, **Apache Kafka**, **Elasticsearch**, and **Clean Architecture**.
 
-🚀 Features
+The project demonstrates how a modern backend system can accept banking transactions through a REST API, publish them asynchronously to Kafka, process and enrich them through application use cases, index them in Elasticsearch, and expose searchable transaction data through an API.
 
-Event-driven architecture with Apache Kafka
+---
 
-Clean Architecture (Domain / Application / Infrastructure / API / Bootstrap)
+## 🚀 Features
 
-Transaction processing pipeline
+* Event-driven transaction processing with Apache Kafka
+* Clean Architecture with clear dependency boundaries
+* REST API for transaction ingestion and search
+* Asynchronous transaction processing
+* Customer enrichment during transaction processing
+* Elasticsearch indexing and customer-based search
+* Exponential retry for failed Kafka messages
+* Dead Letter Queue (DLQ) for unrecoverable events
+* Global API exception handling
+* Request validation
+* Swagger / OpenAPI documentation
+* Local and development Spring profiles
+* Docker Compose infrastructure
+* Multi-module Maven architecture
+* Framework-independent Domain and Application layers
 
-Elasticsearch indexing and search
+---
 
-REST API for querying transactions
+## 🧱 Architecture
 
-Retry & Dead Letter Queue (DLQ) for Kafka consumers
+```text
+                        ┌──────────────────┐
+                        │      Client      │
+                        └────────┬─────────┘
+                                 │
+                                 │ REST
+                                 ▼
+                        ┌──────────────────┐
+                        │   Banking API    │
+                        │  POST / GET API  │
+                        └────────┬─────────┘
+                                 │
+                                 ▼
+                        ┌──────────────────┐
+                        │ Application Layer│
+                        │    Use Cases     │
+                        └───────┬──────────┘
+                                │
+                    ┌───────────┴───────────┐
+                    │                       │
+                    ▼                       ▼
+             ┌─────────────┐         ┌───────────────┐
+             │    Kafka    │         │ Domain Model  │
+             │   Producer  │         │ & Rules       │
+             └──────┬──────┘         └───────────────┘
+                    │
+                    ▼
+       banking.transaction.events
+                    │
+                    ▼
+             ┌─────────────┐
+             │    Kafka    │
+             │   Consumer  │
+             └──────┬──────┘
+                    │
+                    ▼
+          Process Transaction
+                    │
+             ┌──────┴──────┐
+             │             │
+             ▼             ▼
+      Customer Lookup   Transaction
+       / Enrichment      Repository
+             │
+             └──────┬──────┘
+                    ▼
+             ┌─────────────┐
+             │Elasticsearch│
+             └──────┬──────┘
+                    │
+                    ▼
+             Transaction Search
+```
 
-Docker & Docker Compose for one-command local setup
+### Failure Flow
 
-🧱 Architecture Overview
-Client
-  ↓
-REST API (banking-api)
-  ↓
-Application Use Cases (banking-application)
-  ↓
-Ports (Interfaces)
-  ↓
-Infrastructure Adapters
-    - Kafka Consumer
-    - Elasticsearch Adapter
-  ↓
-Domain Model (banking-domain)
+```text
+Kafka Event
+    │
+    ▼
+Consumer
+    │
+    ├── Success ──► Process Transaction
+    │
+    └── Failure
+          │
+          ▼
+    Exponential Retry
+          │
+          ▼
+    Retry Exhausted
+          │
+          ▼
+banking.transaction.dlq
+```
 
-Key Principles
+---
 
-Business logic is framework-agnostic
+## 🧩 Clean Architecture
 
-Spring is used only for wiring and adapters
+The project follows Clean Architecture principles:
 
-Dependencies always point inward
+```text
+banking-domain
+      ↑
+banking-application
+      ↑
+banking-api / banking-infrastructure
+      ↑
+banking-bootstrap
+```
 
-🛠️ Tech Stack
+### Key Principles
 
-Java 21
+* Domain logic does not depend on Spring.
+* Application use cases do not depend on Spring.
+* Infrastructure implements application output ports.
+* API acts as an inbound adapter.
+* Spring configuration is centralized in the bootstrap module.
+* Dependencies point toward the core of the application.
 
-Spring Boot 3
+---
 
+## 📦 Modules
+
+| Module                   | Responsibility                                            |
+| ------------------------ | --------------------------------------------------------- |
+| `banking-domain`         | Domain models, value objects, events, and business rules  |
+| `banking-application`    | Use cases, commands, DTOs, and ports                      |
+| `banking-infrastructure` | Kafka, Elasticsearch, repositories, and external adapters |
+| `banking-api`            | REST controllers, validation, and API exception handling  |
+| `banking-bootstrap`      | Spring Boot entry point and dependency wiring             |
+
+---
+
+## 🛠 Tech Stack
+
+| Technology                | Usage                                    |
+| ------------------------- | ---------------------------------------- |
+| Java 21                   | Main programming language                |
+| Spring Boot 3             | Application runtime and infrastructure   |
+| Apache Kafka              | Asynchronous event streaming             |
+| Spring Kafka              | Kafka producer, consumer, retry, and DLQ |
+| Elasticsearch 8           | Transaction indexing and search          |
+| Spring Data Elasticsearch | Elasticsearch repository integration     |
+| Maven                     | Multi-module build system                |
+| Docker                    | Containerization                         |
+| Docker Compose            | Local infrastructure orchestration       |
+| SpringDoc OpenAPI         | Swagger / API documentation              |
+| JUnit 5                   | Unit testing                             |
+
+---
+
+## 🔄 Transaction Processing Flow
+
+A transaction follows this pipeline:
+
+```text
+POST /api/transactions
+        │
+        ▼
+CreateTransactionUseCase
+        │
+        ▼
+TransactionEventPublisher
+        │
+        ▼
 Apache Kafka
+banking.transaction.events
+        │
+        ▼
+TransactionEventConsumer
+        │
+        ▼
+ProcessTransactionEventUseCase
+        │
+        ├── Validate Transaction
+        ├── Lookup Customer
+        ├── Enrich Transaction
+        ├── Persist Transaction
+        └── Index Transaction
+                │
+                ▼
+          Elasticsearch
+                │
+                ▼
+GET /api/transactions
+```
 
-Elasticsearch
+---
 
-Spring Data Elasticsearch
+## 🐳 Running the Project
 
-Docker & Docker Compose
+### Prerequisites
 
-Maven (Multi-module)
+Make sure the following are installed:
 
-📦 Modules
-Module	Description
-banking-domain	Core domain model and business rules
-banking-application	Use cases and ports (application logic)
-banking-infrastructure	Kafka & Elasticsearch adapters
-banking-api	REST API (Inbound adapter)
-banking-bootstrap	Spring Boot entry point & wiring
-🐳 Running the Project (Docker)
-1️⃣ Build the application image
-docker build -t banking-data-platform .
+* Java 21
+* Maven
+* Docker
+* Docker Compose
 
-2️⃣ Start all services
-docker compose up
+### Start Infrastructure
 
+```bash
+docker compose up -d zookeeper kafka elasticsearch
+```
 
-This will start:
+Verify containers:
 
-Kafka
+```bash
+docker compose ps
+```
 
-Zookeeper
+### Run with Local Profile
 
-Elasticsearch
+The `local` profile uses in-memory adapters where appropriate and is useful for fast development.
 
-Banking Application
+```bash
+mvn clean install -DskipTests
+```
 
-🔍 API Usage
-Search Transactions by Customer ID
-GET http://localhost:8081/api/transactions?customerId=123
+Run the bootstrap application with:
 
+```text
+-Dspring.profiles.active=local
+```
 
-Response Example
+### Run with Real Elasticsearch
 
+Use the `dev` profile to run the transaction search flow against Elasticsearch:
+
+```text
+-Dspring.profiles.active=dev
+```
+
+Elasticsearch:
+
+```text
+http://localhost:9200
+```
+
+Application:
+
+```text
+http://localhost:18080
+```
+
+---
+
+## 📡 API
+
+### Create Transaction
+
+```http
+POST /api/transactions
+Content-Type: application/json
+```
+
+Example request:
+
+```json
+{
+  "transactionId": "TX-10001",
+  "customerId": "CUST-123",
+  "accountId": "ACC-456",
+  "amount": 2500000,
+  "currency": "IRR",
+  "type": "DEPOSIT",
+  "channel": "MOBILE",
+  "transactionTime": "2026-09-04T11:00:00Z"
+}
+```
+
+The API publishes the transaction as an event to Kafka for asynchronous processing.
+
+---
+
+### Search Transactions
+
+```http
+GET /api/transactions?customerId=CUST-123
+```
+
+Example response:
+
+```json
 [
   {
-    "transactionId": "tx-1",
-    "customerId": "123",
-    "accountId": "acc-99",
-    "amount": 1500,
-    "currency": "USD",
+    "transactionId": "TX-10001",
+    "customerId": "CUST-123",
+    "accountId": "ACC-456",
+    "amount": 2500000,
+    "currency": "IRR",
     "transactionType": "DEPOSIT",
     "channel": "MOBILE",
-    "transactionTime": "2025-01-01T10:15:30Z",
-    "status": "COMPLETED"
+    "transactionTime": "2026-09-04T11:00:00Z",
+    "status": "INDEXED"
   }
 ]
+```
 
-📡 Kafka Topics
-Topic	Purpose
-banking.transaction.events	Main transaction events
-banking.transaction.retry	Retry topic
-banking.transaction.dlq	Dead Letter Queue
-🧪 Testing Strategy
+---
 
-Domain and application layers are unit-tested
+## 📖 Swagger / OpenAPI
 
-Use cases are tested without Spring context
+After starting the application:
 
-Infrastructure concerns are isolated
+```text
+http://localhost:18080/swagger-ui/index.html
+```
 
-🧠 Design Highlights
+OpenAPI specification:
 
-No Spring annotations in Domain or Application layers
+```text
+http://localhost:18080/v3/api-docs
+```
 
-Use cases wired in a dedicated bootstrap (composition root)
+---
 
-Retry & DLQ handled centrally via Spring Kafka error handling
+## 📡 Kafka Topics
 
-Docker builds optimized using multi-stage builds
+| Topic                        | Purpose                                 |
+| ---------------------------- | --------------------------------------- |
+| `banking.transaction.events` | Main transaction event stream           |
+| `banking.transaction.dlq`    | Events that failed after retry attempts |
 
-📌 Status
+Failed events are retried using exponential backoff. When the configured retry attempts are exhausted, the original event is published to the Dead Letter Queue.
 
-🚧 In active development
+---
 
-Planned next steps:
+## 🔎 Elasticsearch
 
-Swagger / OpenAPI documentation
+Transactions are indexed in:
 
-Micrometer & metrics
+```text
+banking-transactions
+```
 
-Spring Batch jobs for aggregation
+Inspect the index:
 
-👤 Author
+```bash
+curl "http://localhost:9200/banking-transactions/_search?pretty"
+```
 
-Arman Sadeghian
-Backend Engineer | Java | Event-Driven Systems
+Inspect mappings:
+
+```bash
+curl "http://localhost:9200/banking-transactions/_mapping?pretty"
+```
+
+---
+
+## 🧪 Testing
+
+The project keeps application logic testable without requiring a Spring context.
+
+Example:
+
+```text
+CreateTransactionServiceTest
+```
+
+The test verifies that the application use case:
+
+* creates a valid domain transaction
+* creates a `CREATED` domain event
+* uses the injected `Clock`
+* publishes the event through `TransactionEventPublisher`
+
+Run tests:
+
+```bash
+mvn test
+```
+
+---
+
+## 🛡 Error Handling
+
+The REST API provides structured error responses.
+
+Example:
+
+```json
+{
+  "status": 404,
+  "error": "NOT_FOUND",
+  "message": "No transactions found for customer: CUST-123",
+  "path": "/api/transactions"
+}
+```
+
+The project handles:
+
+* Resource not found errors
+* Business validation errors
+* Request validation errors
+* Constraint violations
+* Unexpected server errors
+
+---
+
+## 🔁 Kafka Retry & DLQ
+
+Consumer failures are handled centrally using Spring Kafka.
+
+```text
+Processing Failure
+       │
+       ▼
+Exponential Backoff
+       │
+       ▼
+Retry
+       │
+       ▼
+Retries Exhausted
+       │
+       ▼
+banking.transaction.dlq
+```
+
+This prevents permanently failing messages from blocking the main transaction processing pipeline.
+
+---
+
+## 💡 Design Decisions
+
+### Why Kafka?
+
+Transaction ingestion and processing are decoupled, allowing processing workloads to evolve independently from the REST API.
+
+### Why Elasticsearch?
+
+The transaction processing model and transaction query model have different requirements. Elasticsearch provides a dedicated searchable representation of processed transactions.
+
+### Why Clean Architecture?
+
+Business and application logic remain independent from Spring, Kafka, Elasticsearch, and other infrastructure technologies.
+
+### Why separate `local` and `dev` profiles?
+
+`local` provides a lightweight development environment, while `dev` verifies integration with real infrastructure such as Elasticsearch.
+
+---
+
+## 📊 Current Status
+
+Implemented:
+
+* ✅ Clean Architecture
+* ✅ Multi-module Maven project
+* ✅ Transaction domain model
+* ✅ REST transaction ingestion
+* ✅ Kafka producer
+* ✅ Kafka consumer
+* ✅ Transaction processing pipeline
+* ✅ Customer enrichment port
+* ✅ Elasticsearch indexing
+* ✅ Elasticsearch search
+* ✅ Exponential retry
+* ✅ Dead Letter Queue
+* ✅ Global exception handling
+* ✅ Request validation
+* ✅ Swagger / OpenAPI
+* ✅ Local and development profiles
+* ✅ Unit testing
+* ✅ Docker-based infrastructure
+
+---
+
+## 👤 Author
+
+**Arman Sadeghian**
+
+Backend Engineer
+Java • Spring Boot • Event-Driven Architecture • Kafka • Clean Architecture
