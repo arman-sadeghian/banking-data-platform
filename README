@@ -128,6 +128,16 @@ banking.transaction.dlq
 
 ---
 
+## 🎬 Demo Flow
+
+1. Client sends transaction through REST API
+2. API publishes event to Kafka
+3. Consumer processes the event
+4. Customer is enriched
+5. Transaction is indexed into Elasticsearch
+6. Transaction becomes searchable through REST API
+7. Failed messages are retried and moved to DLQ if recovery fails
+
 ---
 
 ## 🧩 Clean Architecture
@@ -237,7 +247,12 @@ Make sure the following are installed:
 ### Start Infrastructure
 
 ```bash
-docker compose up -d zookeeper kafka elasticsearch
+docker compose up -d --build
+  Starts:
+  - Banking Application
+  - Kafka
+  - Zookeeper
+  - Elasticsearch
 ```
 
 Verify containers:
@@ -260,7 +275,15 @@ Run the bootstrap application with:
 -Dspring.profiles.active=local
 ```
 
-### Run with Real Elasticsearch
+## Run with Docker Profile
+
+The docker profile runs with containerized infrastructure:
+
+- Kafka
+- Elasticsearch
+- Docker networking
+
+The application is started automatically by Docker Compose.
 
 Use the `dev` profile to run the transaction search flow against Elasticsearch:
 
@@ -277,7 +300,8 @@ http://localhost:9200
 Application:
 
 ```text
-http://localhost:18080
+Application:
+http://localhost:8081
 ```
 
 ---
@@ -341,14 +365,14 @@ Example response:
 After starting the application:
 
 ```text
-http://localhost:18080/swagger-ui/index.html
-```
+Application:
+http://localhost:8081/swagger-ui/index.html```
 
 OpenAPI specification:
 
 ```text
-http://localhost:18080/v3/api-docs
-```
+Application:
+http://localhost:8081/v3/api-docs```
 
 ---
 
