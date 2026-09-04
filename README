@@ -1,4 +1,10 @@
 # Banking Data Platform
+![Java](https://img.shields.io/badge/Java-21-orange)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3-brightgreen)
+![Kafka](https://img.shields.io/badge/Apache-Kafka-black)
+![Elasticsearch](https://img.shields.io/badge/Elasticsearch-8-blue)
+![Docker](https://img.shields.io/badge/Docker-Compose-blue)
+![Architecture](https://img.shields.io/badge/Architecture-Clean%20Architecture-purple)
 
 An event-driven banking transaction processing platform built with **Java 21**, **Spring Boot**, **Apache Kafka**, **Elasticsearch**, and **Clean Architecture**.
 
@@ -103,6 +109,24 @@ Consumer
           ▼
 banking.transaction.dlq
 ```
+
+---
+
+## 📸 Screenshots
+
+### Swagger API Documentation
+
+![Swagger](docs/swagger.png)
+
+### Docker Environment
+
+![Docker Compose](docs/docker.png)
+
+### Elasticsearch Transaction Index
+
+![Elasticsearch](docs/elasticsearch.png)
+
+---
 
 ---
 
