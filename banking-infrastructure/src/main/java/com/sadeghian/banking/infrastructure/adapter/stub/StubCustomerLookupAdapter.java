@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
-@Profile({"local","dev"})
+@Profile({"local", "dev", "docker"})
 public class StubCustomerLookupAdapter implements CustomerLookupPort {
 
     @Override
